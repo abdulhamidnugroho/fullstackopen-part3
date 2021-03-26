@@ -56,10 +56,24 @@ app.post('/api/persons', (request, response) => {
   const random = Math.floor(Math.random() * Math.floor(100));
 
   const person = request.body
+  
+  if (!person.name || !person.number) {
+    return response.status(400).json({
+      error: 'name or number is missing'
+    })
+  }
+
+  const check = persons.some(el => el.name === person.name)
+
+  if (check) {
+    return response.status(400).json({
+      error: 'name must be unique'
+    })
+  }
+
   person.id    = random
 
   persons.concat(person)
-  console.log(person)
   response.json(person)
 })
 
