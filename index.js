@@ -53,12 +53,10 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-  const maxId = persons.length > 0 
-                ? Math.max(...persons.map(el => el.id))
-                : 0
+  const random = Math.floor(Math.random() * Math.floor(100));
 
   const person = request.body
-  person.id    = maxId + 1
+  person.id    = random
 
   persons.concat(person)
   console.log(person)
@@ -71,7 +69,7 @@ app.get('/info', (request, response) => {
 
   response.send(info)
   
-  // to Do
+  // Question ??
   // info return "Phonebook has info for 4 people
   //              Fri Mar 26 2021 14:19:52 GMT+0700 (Western Indonesia Time)"
   // new Date() return "2021-03-26T07:20:33.723Z"
