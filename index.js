@@ -25,11 +25,19 @@ let persons = [
   }
 ]
 
+app.use(morgan((tokens, req, res) => {
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'), '-',
+    tokens['response-time'](req, res), 'ms',
+    req.method === 'POST' ? JSON.stringify(req.body) : ''
+  ].join(' ')
+}))
+
 app.use(express.json())
 
-const morganLogger = morgan('combined')
-
-app.use(morganLogger)
 
 app.get('/', (request, response) => {
   response.end('Ok Work')
