@@ -41,6 +41,7 @@ app.use(morgan((tokens, req, res) => {
 
 app.use(express.json())
 
+app.use(express.static('build'))
 
 app.get('/', (request, response) => {
   response.end('Ok Work')
