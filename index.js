@@ -72,28 +72,43 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-  const random = Math.floor(Math.random() * Math.floor(100));
+  const body = request.body
 
-  const person = request.body
+  if (body === undefined) {
+    return response.status(400).json({ error: 'content missing' })
+  }
+
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+
+  person.save().then(result => {
+    response.json(result)
+  })
+
+  // const random = Math.floor(Math.random() * Math.floor(100));
+
+  // const person = request.body
   
-  if (!person.name || !person.number) {
-    return response.status(400).json({
-      error: 'name or number is missing'
-    })
-  }
+  // if (!person.name || !person.number) {
+  //   return response.status(400).json({
+  //     error: 'name or number is missing'
+  //   })
+  // }
 
-  const check = persons.some(el => el.name === person.name)
+  // const check = persons.some(el => el.name === person.name)
 
-  if (check) {
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
-  }
+  // if (check) {
+  //   return response.status(400).json({
+  //     error: 'name must be unique'
+  //   })
+  // }
 
-  person.id    = random
+  // person.id    = random
 
-  persons.concat(person)
-  response.json(person)
+  // persons.concat(person)
+  // response.json(person)
 })
 
 app.get('/info', (request, response) => {
