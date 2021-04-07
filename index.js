@@ -54,15 +54,11 @@ app.get('/api/persons', (request, response) => {
   Person.find({}).then(person => response.json(person))
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(el => el.id === id)
-  
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => response.json(person))
+    .catch(error => next(error))
+
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -118,10 +114,14 @@ const errorHandler = (error, request, response, next) => {
 app.use(errorHandler)
 
 app.get('/info', (request, response) => {
-  let info = `<p>Phonebook has info for ${persons.length} people</p>`
-  info += new Date()
+  Person.find({}).then(person => {
+    console.log(person.length)
 
-  response.send(info)
+    let info = `<p>Phonebook has info for ${person.length} people</p>`
+    info += new Date()
+
+    response.send(info)
+  })
   
   // Question ??
   // info return "Phonebook has info for 4 people
