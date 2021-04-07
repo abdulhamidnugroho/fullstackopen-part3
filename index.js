@@ -88,29 +88,21 @@ app.post('/api/persons', (request, response) => {
   person.save().then(result => {
     response.json(result)
   })
+})
 
-  // const random = Math.floor(Math.random() * Math.floor(100));
+app.put('/api/persons/:id', (request, response, next) => {
+  console.log(request.params)
+  const body = request.body
 
-  // const person = request.body
-  
-  // if (!person.name || !person.number) {
-  //   return response.status(400).json({
-  //     error: 'name or number is missing'
-  //   })
-  // }
+  const person = {
+    name: body.name,
+    number: body.number
+  }
 
-  // const check = persons.some(el => el.name === person.name)
+  Person.findByIdAndUpdate(request.params.id, person)
+    .then(updated => response.json(updated))
+    .catch(error => next(error))
 
-  // if (check) {
-  //   return response.status(400).json({
-  //     error: 'name must be unique'
-  //   })
-  // }
-
-  // person.id    = random
-
-  // persons.concat(person)
-  // response.json(person)
 })
 
 const errorHandler = (error, request, response, next) => {
