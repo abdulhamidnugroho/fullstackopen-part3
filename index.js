@@ -67,10 +67,10 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   console.log(request.params)
-  response.json(request.params)
-  // Person.findByIdAndRemove(request.params.id)
-  //   .then(result => response.status(204).end())
-  //   .catch(error => next(error))
+
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => response.status(204).end())
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
