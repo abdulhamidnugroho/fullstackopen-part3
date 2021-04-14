@@ -29,10 +29,17 @@ if (process.argv.length > 3) {
     number: process.argv[4]
   })
 
-  person.save().then(result => {
-    console.log(`added ${result.name} number ${result.number} to phonebook`)
-    mongoose.connection.close()
-  })
+
+  Person.findByIdAndRemove(process.argv[3])
+    .then(result => console.log('delete'))
+    .catch(error => console.log('nope'))
+
+  
+
+  // person.save().then(result => {
+  //   console.log(`added ${result.name} number ${result.number} to phonebook`)
+  //   mongoose.connection.close()
+  // })
 }
 
 if (process.argv.length === 3) {

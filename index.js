@@ -83,7 +83,9 @@ app.post('/api/persons', (request, response, next) => {
 
   person.save().then(result => {
     response.json(result)
-  }).catch(error => next(error))
+  }).catch(error => {
+    next(error)
+  })
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -95,10 +97,11 @@ app.put('/api/persons/:id', (request, response, next) => {
     number: body.number
   }
 
-  Person.findByIdAndUpdate(request.params.id, person)
+  Person.findByIdAndUpdate(request.params.id, person, {new: true, runValidators: true})
     .then(updated => response.json(updated))
-    .catch(error => next(error))
-
+    .catch(error => {
+      next(error)
+    })
 })
 
 const errorHandler = (error, request, response, next) => {
@@ -107,7 +110,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   } else if(error.name === 'ValidationError') {
-    return response.status(400).send({ error: 'Name or Number must be unique' })
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
